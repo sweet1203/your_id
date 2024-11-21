@@ -144,6 +144,15 @@
 
     const studentId = `${grade}${cls}${number}`;
 
+    // 사이트 키와 실제 이름 매핑
+    const siteNames = {
+        google: "구글",
+        lms: "리로스쿨",
+        onehour: "원아워-영어",
+        mathholic: "매쓰홀릭-수학",
+        elice: "엘리스코딩"
+    };
+
     try {
         const response = await fetch('students.csv'); // CSV 파일 경로
         const csvText = await response.text();
@@ -166,12 +175,14 @@
             return;
         }
 
-        resultDiv.innerHTML = `<p><strong>${studentId}</strong>의 ${site} 계정: <br>${student[siteIndex]}</p>`;
+        const siteName = siteNames[site]; // 매핑된 사이트 이름 가져오기
+        resultDiv.innerHTML = `<p>너의 <strong>${siteName}</strong> 아이디는: <br><strong>${student[siteIndex]}</strong></p>`;
     } catch (error) {
         console.error('Error loading CSV:', error);
         resultDiv.innerHTML = '<p class="error">계정을 가져오는 중 오류가 발생했습니다.</p>';
     }
 }
+
 </script>
 </body>
 </html>
