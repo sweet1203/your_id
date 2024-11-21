@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>너의 계정은</title>
+<style>
+  body {
+    font-family: 'Nanum Gothic', sans-serif;
+    background: linear-gradient(to bottom, #c4d3f6, #f6e4d4);
+    color: #333;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    color: #333;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  h2 {
+    font-size: 1.2rem;
+    color: #555;
+  }
+
+  .container {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 100%;
+  }
+
+  select, button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 1rem;
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+
+  select:focus, button:hover {
+    border-color: #cc6699;
+    background-color: #f6e4d4;
+  }
+
+  button {
+    background-color: #cc6699;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .result {
+    margin-top: 20px;
+    font-size: 1rem;
+    color: #333;
+  }
+
+  .error {
+    color: red;
+    font-weight: bold;
+  }
+
+  footer {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #555;
+  }
+</style>
+</head>
+<body>
+<h1>너의 계정은</h1>
+<h2>대성여자고등학교 학생 계정 조회</h2>
+
+<div class="container">
+  <select id="grade">
+    <option value="">학년 선택</option>
+    <option value="1">1학년</option>
+    <option value="2">2학년</option>
+    <option value="3">3학년</option>
+  </select>
+
+  <select id="class">
+    <option value="">반 선택</option>
+    <script>
+      for (let i = 1; i <= 11; i++) {
+        document.write(`<option value="${String(i).padStart(2, '0')}">${i}반</option>`);
+      }
+    </script>
+  </select>
+
+  <select id="number">
+    <option value="">번호 선택</option>
+    <script>
+      for (let i = 1; i <= 30; i++) {
+        document.write(`<option value="${String(i).padStart(2, '0')}">${i}번</option>`);
+      }
+    </script>
+  </select>
+
+  <select id="site">
+    <option value="">사이트 선택</option>
+    <option value="google">구글</option>
+    <option value="lms">리로스쿨</option>
+    <option value="onehour">원아워-영어</option>
+    <option value="mathholic">매쓰홀릭-수학</option>
+    <option value="elice">엘리스코딩-정보</option>
+  </select>
+
+  <button onclick="findAccount()">계정 확인</button>
+
+  <div id="result" class="result"></div>
+</div>
+
+<footer>- 대성여자고등학교 정보샘 제작 -</footer>
+
+<script>
+  async function findAccount() {
+    const grade = document.getElementById('grade').value;
+    const cls = document.getElementById('class').value;
+    const number = document.getElementById('number').value;
+    const site = document.getElementById('site').value;
+
+    const resultDiv = document.getElementById('result');
+    resultDiv.textContent = '';
+
+    if (!grade || !cls || !number || !site) {
+        resultDiv.innerHTML = '<p class="error">모든 항목을 선택해주세요.</p>';
+        return;
+    }
+
+    const studentId = `${grade}${cls}${number}`;
+
+    try {
+        const response = await fetch('students.csv'); // CSV 파일 경로
+        const csvText = await response.text();
+        const rows = csvText.split('\n').map(row => row.split(','));
+
+        const headers = rows[0];
+        const data = rows.slice(1);
+
+        const siteIndex = headers.indexOf(site);
+
+        if (siteIndex === -1) {
+            resultDiv.innerHTML = '<p class="error">해당 사이트 데이터가 없습니다.</p>';
+            return;
+        }
+
+        const student = data.find(row => row[0] === studentId);
+
+        if (!student) {
+            resultDiv.innerHTML = '<p class="error">학번을 확인 후 다시 시도해주세요.</p>';
+            return;
+        }
+
+        resultDiv.innerHTML = `<p><strong>${studentId}</strong>의 ${site} 계정: <br>${student[siteIndex]}</p>`;
+    } catch (error) {
+        console.error('Error loading CSV:', error);
+        resultDiv.innerHTML = '<p class="error">계정을 가져오는 중 오류가 발생했습니다.</p>';
+    }
+}
+</script>
+</body>
+</html>
