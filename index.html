@@ -161,14 +161,14 @@
         const headers = rows[0];
         const data = rows.slice(1);
 
-        const siteIndex = headers.indexOf(site);
+        const siteIndex = headers.indexOf(site.trim()); // 공백 처리
 
         if (siteIndex === -1) {
             resultDiv.innerHTML = '<p class="error">해당 사이트 데이터가 없습니다.</p>';
             return;
         }
 
-        const student = data.find(row => row[0] === studentId);
+        const student = data.find(row => row[0].trim() === studentId.trim());
 
         if (!student) {
             resultDiv.innerHTML = '<p class="error">학번을 확인 후 다시 시도해주세요.</p>';
