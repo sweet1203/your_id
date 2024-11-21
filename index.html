@@ -103,54 +103,7 @@
   </select>
 
   <select id="number">
-    <option value="">번호 선택</option>
-    <script>
-      for (let i = 1; i <= 30; i++) {
-        document.write(`<option value="${String(i).padStart(2, '0')}">${i}번</option>`);
-      }
-    </script>
-  </select>
-
-  <select id="site">
-    <option value="">사이트 선택</option>
-    <option value="google">구글</option>
-    <option value="lms">리로스쿨</option>
-    <option value="onehour">원아워-영어</option>
-    <option value="mathholic">매쓰홀릭-수학</option>
-    <option value="elice">엘리스코딩-정보</option>
-  </select>
-
-  <button onclick="findAccount()">계정 확인</button>
-
-  <div id="result" class="result"></div>
-</div>
-
-<footer>- 대성여자고등학교 정보샘 제작 -</footer>
-
-<script>
-  async function findAccount() {
-    const grade = document.getElementById('grade').value;
-    const cls = document.getElementById('class').value;
-    const number = document.getElementById('number').value;
-    const site = document.getElementById('site').value;
-
-    const resultDiv = document.getElementById('result');
-    resultDiv.textContent = '';
-
-    if (!grade || !cls || !number || !site) {
-        resultDiv.innerHTML = '<p class="error">모든 항목을 선택해주세요.</p>';
-        return;
-    }
-
-    const studentId = `${grade}${cls}${number}`;
-
-    // 사이트 키와 실제 이름 매핑
-    const siteNames = {
-        google: "구글",
-        lms: "리로스쿨",
-        onehour: "원아워-영어",
-        mathholic: "매쓰홀릭-수학",
-        elice: "엘리스코딩"
+    <option value보"
     };
 
     try {
